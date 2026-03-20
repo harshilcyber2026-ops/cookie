@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FlagVault Corp — Internal Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Favicon: tiny lock emoji via SVG data URI -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍪</text></svg>" />
+</head>
+<body>
+
+  <!-- ═══════════════════════  LOGIN PAGE  ═══════════════════════ -->
+  <div id="page-login" class="page active">
+    <div class="noise"></div>
+
+    <header class="site-header">
+      <div class="logo-mark">🍪</div>
+      <span class="logo-text">FlagVault <span class="accent">Corp</span></span>
+    </header>
+
+    <main class="login-wrap">
+      <div class="login-card">
+        <div class="card-eye"></div>
+        <h1 class="card-title">Employee<br/>Login</h1>
+        <p class="card-sub">Authorised personnel only.</p>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" placeholder="john.doe" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="••••••••" />
+        </div>
+
+        <button id="btn-login" class="btn-primary">Sign In</button>
+        <p id="login-error" class="error-msg hidden">Invalid credentials. Try again.</p>
+
+        <p class="hint-text">🔎 Hint: Any credentials work. Something sweet awaits in DevTools.</p>
+      </div>
+    </main>
+
+    <footer class="site-footer">© 2024 FlagVault Corp. All rights reserved.</footer>
+  </div>
+
+  <!-- ═══════════════════════  DASHBOARD PAGE  ═══════════════════════ -->
+  <div id="page-dashboard" class="page">
+    <div class="noise"></div>
+
+    <header class="site-header">
+      <div class="logo-mark">🍪</div>
+      <span class="logo-text">FlagVault <span class="accent">Corp</span></span>
+      <nav class="top-nav">
+        <a href="#" onclick="navigate('dashboard')" class="nav-link active-link">Dashboard</a>
+        <a href="#" onclick="navigate('admin')" class="nav-link">Admin Panel</a>
+        <a href="#" onclick="doLogout()" class="nav-link nav-logout">Logout</a>
+      </nav>
+    </header>
+
+    <main class="dash-wrap">
+      <div class="dash-hero">
+        <span class="tag-label">Employee Portal</span>
+        <h2 id="welcome-msg">Welcome, <span class="accent">employee</span>.</h2>
+        <p class="dash-sub">You are logged in as a <strong id="role-badge" class="badge badge-user">user</strong>.</p>
+        <p class="dash-sub">Admins can access the <code>/admin</code> panel. You do not have permission.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-icon">🔑</div>
+          <h3>Session Cookie</h3>
+          <p>Your session is stored as a base64-encoded cookie named <code>session</code>. Open DevTools → Application → Cookies to inspect it.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🛠️</div>
+          <h3>Decode & Modify</h3>
+          <p>Decode the cookie value in base64, change the role to <code>admin</code>, re-encode it, and set the new value manually.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🚩</div>
+          <h3>Admin Panel</h3>
+          <p>Once your cookie says <code>admin</code>, navigate to <code>/admin</code> (click "Admin Panel" in the nav) to retrieve the flag.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">© 2024 FlagVault Corp. All rights reserved.</footer>
+  </div>
+
+  <!-- ═══════════════════════  ADMIN PAGE  ═══════════════════════ -->
+  <div id="page-admin" class="page">
+    <div class="noise"></div>
+
+    <header class="site-header">
+      <div class="logo-mark">🍪</div>
+      <span class="logo-text">FlagVault <span class="accent">Corp</span></span>
+      <nav class="top-nav">
+        <a href="#" onclick="navigate('dashboard')" class="nav-link">Dashboard</a>
+        <a href="#" onclick="navigate('admin')" class="nav-link active-link">Admin Panel</a>
+        <a href="#" onclick="doLogout()" class="nav-link nav-logout">Logout</a>
+      </nav>
+    </header>
+
+    <main class="admin-wrap">
+
+      <!-- ACCESS DENIED state -->
+      <div id="admin-denied" class="admin-state hidden">
+        <div class="denied-icon">🚫</div>
+        <h2>Access Denied</h2>
+        <p>You do not have administrator privileges.</p>
+        <p class="denied-hint">Your current role: <code id="denied-role">user</code></p>
+        <p class="denied-hint">Modify your <code>session</code> cookie — change <code>"role":"user"</code> to <code>"role":"admin"</code> then re-encode in base64.</p>
+        <button class="btn-primary" onclick="navigate('dashboard')">← Go Back</button>
+      </div>
+
+      <!-- ACCESS GRANTED state -->
+      <div id="admin-granted" class="admin-state hidden">
+        <div class="flag-container">
+          <div class="flag-glow"></div>
+          <div class="flag-icon">🏆</div>
+          <h2 class="flag-title">Administrator Access Granted</h2>
+          <p class="flag-sub">Welcome to the FlagVault Corp Admin Panel.</p>
+
+          <div class="flag-box">
+            <span class="flag-label">SECRET FLAG</span>
+            <code id="flag-display" class="flag-value">FlagVault{sw33t_cook13s_4r3_4_s3cur1ty_r1sk}</code>
+            <button class="copy-btn" onclick="copyFlag()">Copy</button>
+          </div>
+
+          <div class="admin-logs">
+            <h3>📋 System Logs</h3>
+            <div class="log-line"><span class="log-ts">[2024-03-17 09:41:02]</span> Admin session created</div>
+            <div class="log-line"><span class="log-ts">[2024-03-17 09:41:02]</span> Flag retrieved: <code>FlagVault{sw33t_cook13s_4r3_4_s3cur1ty_r1sk}</code></div>
+            <div class="log-line"><span class="log-ts">[2024-03-17 09:40:55]</span> Cookie tampered — role escalated</div>
+            <div class="log-line log-warn"><span class="log-ts">[2024-03-17 09:38:11]</span> ⚠️  Unsigned cookie accepted by server</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="site-footer">© 2024 FlagVault Corp. All rights reserved.</footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
